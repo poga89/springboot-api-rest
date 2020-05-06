@@ -3,11 +3,18 @@ package com.bolsadeideas.springboot.backend.apirest.controllers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +41,12 @@ public class ClienteRestController {
 	@GetMapping("/clientes")
 	public List <Cliente> index(){
 		return clienteservice.findAll();
+	}
+	
+	@GetMapping("/clientes/page/{page}")
+	public Page <Cliente> index(@PathVariable Integer page){
+		PageRequest pagable = PageRequest.of(page, 4);
+		return clienteservice.findAll(pagable);
 	}
 	
 	/*
@@ -68,9 +81,19 @@ public class ClienteRestController {
 	
 	@PostMapping("/clientes")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> cerate(@RequestBody Cliente cliente) {
+	public ResponseEntity<?> cerate(@Valid @RequestBody Cliente cliente, BindingResult resultErr) {
 		
 		Map<String, Object> response = new HashMap<String, Object>();
+		
+		if(resultErr.hasErrors()) {
+			
+			List<String> error = resultErr.getFieldErrors()
+					.stream()
+					.map(r -> "El campo "+ r.getField() +" - "+ r.getDefaultMessage())
+					.collect(Collectors.toList());
+			response.put("errors", error);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR) ;
+		}
 		
 		Cliente clientenew = null;
 		try {
@@ -89,9 +112,20 @@ public class ClienteRestController {
 	
 	@PutMapping("/clientes/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> update(@RequestBody Cliente cliente,@PathVariable Long id) {
+	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, BindingResult resultErr, @PathVariable Long id) {
 		
 		Map<String, Object> response = new HashMap<String, Object>();
+		
+		
+		if(resultErr.hasErrors()) {
+			
+			List<String> error = resultErr.getFieldErrors()
+					.stream()
+					.map(r -> "El campo "+ r.getField() +" - "+ r.getDefaultMessage())
+					.collect(Collectors.toList());
+			response.put("errors", error);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR) ;
+		}
 		
 		Cliente clienteActual = clienteservice.findById(id);
 		Cliente clienteupdate = null;

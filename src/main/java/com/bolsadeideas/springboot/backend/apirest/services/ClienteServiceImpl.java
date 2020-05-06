@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,13 @@ public class ClienteServiceImpl implements IDclienteService {
 
 	@Override
 	@Transactional
+	public Page<Cliente> findAll(Pageable pegable) {
+		// TODO Auto-generated method stub
+		return clienteDao.findAll(pegable);
+	}
+	
+	@Override
+	@Transactional
 	public Cliente save(Cliente cliente) {
 		// TODO Auto-generated method stub
 		return clienteDao.save(cliente);
@@ -44,5 +53,7 @@ public class ClienteServiceImpl implements IDclienteService {
 		// TODO Auto-generated method stub
 		return clienteDao.findById(id).orElse(null) ;
 	}
+
+	
 
 }
