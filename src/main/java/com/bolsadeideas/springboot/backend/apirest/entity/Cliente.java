@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -32,10 +34,13 @@ public class Cliente implements Serializable {
 	@Email
 	@Column(nullable = false)
 	private String email;
-	
+
 	@Column(name="create_at")
 	private Date creatAT;
 
+	@Column
+	private String foto;
+	
 	public long getId() {
 		return id;
 	}
@@ -75,6 +80,15 @@ public class Cliente implements Serializable {
 	public void setCreatAT(Date creatAT) {
 		this.creatAT = creatAT;
 	}
+	
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
 	
 	
 	private static final long serialVersionUID = 1L;
