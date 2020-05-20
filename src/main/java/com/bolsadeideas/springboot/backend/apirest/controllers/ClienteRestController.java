@@ -17,6 +17,8 @@ import javax.management.RuntimeErrorException;
 import javax.sound.midi.Patch;
 import javax.validation.Valid;
 
+import org.hibernate.validator.internal.util.logging.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -52,6 +54,9 @@ public class ClienteRestController {
  
 	@Autowired
 	private IDclienteService clienteservice;
+	
+	private final Logger log = org.slf4j.LoggerFactory.getLogger(ClienteRestController.class);
+	
 	
 	@GetMapping("/clientes")
 	public List <Cliente> index(){
@@ -202,6 +207,7 @@ public class ClienteRestController {
 		Cliente cliente = clienteservice.findById(id);
 
 		if(!archivo.isEmpty()) {
+			
 			String nombrearhivo= UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename().replace(" ","");
 			Path rutaArchivo = Paths.get("upload").resolve(nombrearhivo).toAbsolutePath();
 			
@@ -238,6 +244,10 @@ public class ClienteRestController {
 	public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
 		
 		Path rutaArchivo = Paths.get("upload").resolve(nombreFoto).toAbsolutePath();
+		
+		log.info(rutaArchivo.toString());
+		
+		
 		Resource recurso = null;
 		try {
 			recurso = new UrlResource(rutaArchivo.toUri());
