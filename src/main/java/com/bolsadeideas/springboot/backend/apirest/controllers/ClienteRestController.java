@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.bolsadeideas.springboot.backend.apirest.entity.Cliente;
+import com.bolsadeideas.springboot.backend.apirest.entity.Region;
 import com.bolsadeideas.springboot.backend.apirest.services.IDclienteService;
 import com.bolsadeideas.springboot.backend.apirest.services.UploadFileServiceImpl;
 
@@ -153,6 +154,9 @@ public class ClienteRestController {
 			clienteActual.setNombre(cliente.getNombre());
 			clienteActual.setEmail(cliente.getEmail() );
 			clienteActual.setCreatAT(cliente.getCreatAT());
+			clienteActual.setRegion(cliente.getRegion());
+			
+			
 			clienteupdate = clienteservice.save(clienteActual);
 		} catch (DataAccessException e) {
 			response.put("error", "error al actualizar el usuario "+e.getMostSpecificCause());
@@ -243,6 +247,12 @@ public class ClienteRestController {
 		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
 		
 		
+	}
+	
+	
+	@GetMapping("clientes/regiones")
+	public List <Region> listarRegiones(){
+		return clienteservice.findAllregiones();
 	}
 	
 }

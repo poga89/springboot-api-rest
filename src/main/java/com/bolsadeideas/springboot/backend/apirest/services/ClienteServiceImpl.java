@@ -1,7 +1,7 @@
 package com.bolsadeideas.springboot.backend.apirest.services;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bolsadeideas.springboot.backend.apirest.dao.IDclienteDao;
 import com.bolsadeideas.springboot.backend.apirest.entity.Cliente;
+import com.bolsadeideas.springboot.backend.apirest.entity.Region;
 
 @Service
 public class ClienteServiceImpl implements IDclienteService {
@@ -52,6 +53,13 @@ public class ClienteServiceImpl implements IDclienteService {
 	public Cliente findById(Long id) {
 		// TODO Auto-generated method stub
 		return clienteDao.findById(id).orElse(null) ;
+	}
+
+	@Override
+	@Transactional
+	public List<Region> findAllregiones() {
+		
+		return clienteDao.findAllregiones();
 	}
 
 	
